@@ -38,22 +38,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
-<<<<<<< HEAD
 			<groupId>com.oracle.database.jdbc</groupId>
     		<artifactId>ojdbc11</artifactId>
-			<version>21.13.0.0</version>
 		</dependency>
 
-
 		<dependency>
-=======
->>>>>>> 24efb980c88ca6da0af1b99d7f8dfdca2b70d342
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
