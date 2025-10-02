@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,16 +16,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "PRODUCTS")
+@Table(name = "ECOM_PRODUCTS")
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Product_seq")
+	@SequenceGenerator(name = "Product_seq", sequenceName = "PRODUCT_SEQ", allocationSize = 1)
+	@Column(columnDefinition = "NUMBER(19,0)")
 
+	private Long id; 
     @Column(nullable = false, unique = true, length = 50)
     private String sku;  
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, unique = true,length = 150)
     private String name;
 
     @Column(nullable = false)
