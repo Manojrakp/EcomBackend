@@ -26,6 +26,17 @@ public class GetProductService {
         return productRepository.save(product);
     }
     
+    public Product saveProductWithDetails(Product product) {
+
+        // ✅ Ensure bidirectional relationship is set
+        if (product.getProductInfo() != null) {
+            product.getProductInfo().setProduct(product);
+        }
+
+        // ✅ Cascade will automatically save ProductDtls
+        return productRepository.save(product);
+    }
+    
  
     
 }

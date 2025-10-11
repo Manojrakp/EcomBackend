@@ -1,5 +1,7 @@
 package com.ecom.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +19,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "ECOM_PRODUCTS")
+
 public class Product {
 	
 	@Id
@@ -48,7 +51,12 @@ public class Product {
     @Column(length = 255)
     private String thumbnailUrl;
 
+   
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference // Added to Remove the Recursion of the mapping // short term fix 
+    
     private ProductDtls productInfo;
+    
+    
 
 }
