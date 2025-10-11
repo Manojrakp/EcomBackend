@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.ecom.entity.Product;
+import com.ecom.entity.ProductDtls;
 import com.ecom.repository.ProductRepository;
 
 
@@ -14,7 +15,7 @@ public class GetProductService {
     private final ProductRepository productRepository;
 
     public GetProductService(ProductRepository productRepository){
-        this.productRepository =productRepository;
+        this.productRepository = productRepository;
     }
 
     public List<Product> getAllUsers() {
@@ -24,5 +25,7 @@ public class GetProductService {
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
+    
+ 
     
 }
