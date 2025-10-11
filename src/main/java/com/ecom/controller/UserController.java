@@ -13,6 +13,7 @@ import com.ecom.service.UserService;
 
 @RestController
 @RequestMapping("/users")
+
 public class UserController {
 
     private final UserService userService;

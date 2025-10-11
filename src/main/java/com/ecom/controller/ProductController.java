@@ -30,13 +30,13 @@ public class ProductController {
         return getProductService.saveProduct(dtls);
     }
 
-    @PostMapping("dtls/save")
+    @PostMapping("Details/save")
     public ProductDtls createProductDtls(@RequestBody ProductDtls productDtls) {
         return productDtlsRepository.save(productDtls);
     }
     
-    @PostMapping("/saveWithDtls")
-    public Product saveProductWithDetails(@RequestBody Product product) {
+    @PostMapping("/saveWithDetails")
+    public Product saveProductWithDetails(@RequestBody Product product) throws Exception {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String jsonProduct = mapper.writeValueAsString(product);
@@ -48,8 +48,8 @@ public class ProductController {
 
             return savedProduct;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        	 e.printStackTrace(); 
+        	    throw e; 
         }
     }
 
