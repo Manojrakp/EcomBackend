@@ -36,4 +36,6 @@ public class PreLoginAds {
     @Column(name = "valid_till")
     private LocalDate validTill;
 
+
 }
+
