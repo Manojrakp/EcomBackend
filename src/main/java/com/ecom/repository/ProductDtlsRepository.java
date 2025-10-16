@@ -2,7 +2,9 @@ package com.ecom.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.ecom.entity.ProductDtls;
+import org.springframework.stereotype.Repository;
 
+import com.ecom.entity.ProductDtls;
+@Repository
 public interface ProductDtlsRepository extends JpaRepository<ProductDtls, Long> {
 }
