@@ -30,8 +30,6 @@ public class ProductDtls {
     @Column(nullable = false, unique = true, length = 50)
     private String sku; 
  
-    
-    
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID") // Maps to the PRODUCT_ID column in ECOM_PRODUCT_DTLS
     private Product product;

@@ -10,17 +10,19 @@ import com.ecom.repository.ProductRepository;
 
 
 @Service
-public class GetProductService {
+public class ProductService {
     
     private final ProductRepository productRepository;
 
-    public GetProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository){
         this.productRepository = productRepository;
     }
 
-    public List<Product> getAllUsers() {
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
+    
+    
 
     public Product saveProduct(Product product) {
         return productRepository.save(product);
