@@ -1,14 +1,15 @@
 package com.ecom.controller;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ecom.dto.PreloginResponse;
+import com.ecom.dto.ProductDetailsRecord;
+import com.ecom.service.GetProductDtlsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import com.ecom.entity.Product;
-import com.ecom.repository.ProductDtlsRepository;
 import com.ecom.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,28 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/product")
 @Slf4j
+@RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-    private final ProductDtlsRepository productDtlsRepository;
-    
+    private final GetProductDtlsService getProductDtlsService;
 
-    public ProductController(ProductService getProductService,
-		      ProductDtlsRepository productDtlsRepository) {
-		this.productService = getProductService;
-		this.productDtlsRepository = productDtlsRepository;
-		}
-
-//    @PostMapping("/save")
-//    public Product SaveProduct(@RequestBody Product dtls){
-//        System.out.println("In the Controller------>"+ dtls);
-//        return getProductService.saveProduct(dtls);
-//    }
-//
-//    @PostMapping("Details/save")
-//    public ProductDtls createProductDtls(@RequestBody ProductDtls productDtls) {
-//        return productDtlsRepository.save(productDtls);
-//    }
-    
     @PostMapping("/saveWithDetails")
     public Product saveProductWithDetails(@RequestBody Product product) throws Exception {
         try {
@@ -61,6 +45,25 @@ public class ProductController {
     public List<Product> GetAllProduct() {
     	return productService.getAllProducts();
     	 
+    }
+
+    @PostMapping("/getByproductById")
+//    public ProductDetailsRecord  getProductById(@RequestBody Map<String, Long> requestBody) {
+//        Long productId = requestBody.get("productId");
+//        log.debug(getProductDtlsService.getProductDtlsByProductId(productId));
+//        return getProductDtlsService.getProductDtlsByProductId(productId);
+//    }
+    public ProductDetailsRecord getProductById(@RequestBody Map<String, Long> requestBody) {
+        // 1. Log the start of the method and the received input
+        log.info("Request received to fetch product details. Request body: {}", requestBody);
+
+        Long productId = requestBody.get("productId");
+
+        ProductDetailsRecord productDetails = getProductDtlsService.getProductDtlsByProductId(productId);
+
+        log.debug("Product details retrieved for ID {}: {}", productId, productDetails);
+
+        return productDetails;
     }
 
 }

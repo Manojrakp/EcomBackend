@@ -1,5 +1,6 @@
 package com.ecom.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,6 +19,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "ECOM_PRODUCT_DTLS")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "product"}) //Jackson to skip the proxy internals  -- to bytebuddy.ByteBuddyInterceptor
+
 public class ProductDtls {
 
     @Id
@@ -25,8 +28,7 @@ public class ProductDtls {
     @SequenceGenerator(name = "Product_dtl_seq", sequenceName = "PRODUCT_DTL_SEQ", allocationSize = 1)
 
     private Long id;
-    
-    
+       
     @Column(nullable = false, unique = true, length = 50)
     private String sku; 
  
