@@ -23,13 +23,6 @@ public class PreLoginHomeServices {
 	
 	private final ProductRepository productRepository;
 
-	//@PostConstruct
-//	public List<PreLoginAds> getActivePreloginAds() {
-//	    List<PreLoginAds> activeAds = preloginHomeRepositary.findValidAds();
-//	   log.debug("Active Prelogin Ads fetched: " + activeAds);
-//	    return activeAds;
-//	}
-	
 	  public List<Product> getAllUsers() {
 	        return productRepository.findAll();
 	    }

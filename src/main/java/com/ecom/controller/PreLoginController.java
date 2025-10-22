@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("api/home")
 @Slf4j
 public class PreLoginController {
 
