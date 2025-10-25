@@ -1,6 +1,6 @@
 package com.ecom.entity;
 
-import com.ecom.util.StringListConverter;
+import com.ecom.utils.StringListConverter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
