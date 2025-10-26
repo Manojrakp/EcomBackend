@@ -1,7 +1,12 @@
 package com.ecom.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import com.ecom.security.JwtUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,14 +17,28 @@ import com.ecom.entity.User;
 import com.ecom.service.UserService;
 
 @RestController
-@RequestMapping("/users")
-
+@RequestMapping("/api")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtUtils jwtUtils;
+
+
+    @PostMapping("/login")
+    public Map<String, String> login(@RequestBody Map<String, String> loginRequest) {
+        String username = loginRequest.get("username");
+        String password = loginRequest.get("password");
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
+
+        String token = jwtUtils.generateToken(username);
+        return Map.of("token", token);
     }
 
     @GetMapping
@@ -27,7 +46,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/create")
+    @PostMapping("user/create")
     public User createUser(@RequestBody User user) {
         return userService.saveUser(user);
     }

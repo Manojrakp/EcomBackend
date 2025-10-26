@@ -1,41 +1,46 @@
 package com.ecom.security;
 
 import lombok.RequiredArgsConstructor;
+import com.ecom.security.JwtAuthFilter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final JwtAuthFilter jwtAuthFilter;
 
-    @Autowired
-    private MyJwtAuthenticationConverter myJwtAuthenticationConverter;
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf((csrf) -> csrf.disable())
-
+           // 2.Combine and order all authorization rules: specific first, catch-all last
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/public/**").permitAll()
-                        .anyRequest().authenticated() // Require authentication for all other requests
+           // Specific public endpoints (login/auth must be here)
+                .requestMatchers("/api/login", "/api/register", "/public/**").permitAll()
+           // Catch-all: all other requests must be authenticated
+                .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                         .jwt(jwt -> jwt
-                                 .jwkSetUri("https://manojkumar.uk.auth0.com/api/v2/")
-                                .jwtAuthenticationConverter(myJwtAuthenticationConverter)
-                        ))
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                .formLogin(form -> form
-                        .loginPage("/login") // Specify custom login page
-                        .permitAll()
-                )
                 .logout(logout -> logout
                         .permitAll());
         return http.build();
