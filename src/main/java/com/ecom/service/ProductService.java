@@ -2,6 +2,8 @@ package com.ecom.service;
 
 import java.util.List;
 
+import com.ecom.dto.PreloginResponse;
+import com.ecom.entity.PreLoginAds;
 import org.springframework.stereotype.Service;
 
 import com.ecom.entity.Product;
@@ -34,11 +36,12 @@ public class ProductService {
         if (product.getProductInfo() != null) {
             product.getProductInfo().setProduct(product);
         }
-
         // ✅ Cascade will automatically save ProductDtls
         return productRepository.save(product);
     }
-    
+
+
+
  
     
 }
