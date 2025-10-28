@@ -1,13 +1,9 @@
 package com.ecom.security;
 
 import lombok.RequiredArgsConstructor;
-import com.ecom.security.JwtAuthFilter;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,26 +17,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
 
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((csrf) -> csrf.disable())
+          .csrf((csrf) -> csrf.disable())
            // 2.Combine and order all authorization rules: specific first, catch-all last
                 .authorizeHttpRequests(authorize -> authorize
            // Specific public endpoints (login/auth must be here)
-                .requestMatchers("/api/login", "/api/register", "/public/**").permitAll()
+                .requestMatchers("/api/login", "/api/register").permitAll()
            // Catch-all: all other requests must be authenticated
                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-
                 .logout(logout -> logout
                         .permitAll());
         return http.build();

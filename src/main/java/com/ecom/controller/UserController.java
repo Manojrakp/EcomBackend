@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecom.entity.User;
+import com.ecom.entity.EcomUser;
 import com.ecom.service.UserService;
 
 @RestController
@@ -42,12 +42,12 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public List<EcomUser> getUsers() {
         return userService.getAllUsers();
     }
 
     @PostMapping("user/create")
-    public User createUser(@RequestBody User user) {
+    public EcomUser createUser(@RequestBody EcomUser user) {
         return userService.saveUser(user);
     }
 }
