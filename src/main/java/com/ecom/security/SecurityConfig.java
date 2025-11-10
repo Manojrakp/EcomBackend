@@ -12,16 +12,22 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
+    private final CustomAuthEntryPoint customAuthEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
           .csrf((csrf) -> csrf.disable())
            // 2.Combine and order all authorization rules: specific first, catch-all last
+                // 🔹 Register your custom authentication entry point here
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthEntryPoint)
+                )
+
                 .authorizeHttpRequests(authorize -> authorize
            // Specific public endpoints (login/auth must be here)
                 .requestMatchers("/api/login", "/api/register").permitAll()

@@ -41,6 +41,21 @@ public class UserController {
         return Map.of("token", token);
     }
 
+    @PostMapping("/register")
+    public Map<String, String> register(@RequestBody Map<String, String> registerRequest) {
+        String username = registerRequest.get("username");
+        String password = registerRequest.get("password");
+        String email = registerRequest.get("email");
+        userService.registerUser(username, password, "USER", email);
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
+
+        String token = jwtUtils.generateToken(username);
+        return Map.of("token", token);
+    }
+
     @GetMapping
     public List<EcomUser> getUsers() {
         return userService.getAllUsers();

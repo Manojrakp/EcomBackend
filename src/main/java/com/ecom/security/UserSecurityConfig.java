@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UserSecurityConfig {
     private final UserService userService;
 
+
     // Authentication provider that uses your DB-based UserDetailsService
     @Bean
     public DaoAuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
@@ -22,14 +23,5 @@ public class UserSecurityConfig {
         provider.setUserDetailsService(userService);
         return provider;
     }
-
-//    @Bean
-//    public UserDetailsService(PasswordEncoder passwordEncoder) {
-//        UserDetails user = User.withUsername("u")
-//                .password(passwordEncoder.encode("m"))
-//                .roles("USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
 
 }
