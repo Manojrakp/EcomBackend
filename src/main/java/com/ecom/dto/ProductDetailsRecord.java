@@ -1,17 +1,16 @@
 package com.ecom.dto;
 
-import com.ecom.entity.PreLoginAds;
 import com.ecom.entity.Product;
-import com.ecom.entity.ProductDtls;
 
 import java.util.List;
 
 
-public record ProductDetailsRecord<T>(String respCode,
+public record ProductDetailsRecord<T>(String status,
                                 String message,
-                                      List<T> ProductDetailsforID
-        ) {
+                                      List<T> ProductDetailsforID,
+                                      Product product) {
 }
+
 
 
 

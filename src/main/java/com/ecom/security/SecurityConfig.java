@@ -31,13 +31,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
            // Specific public endpoints (login/auth must be here)
                 .requestMatchers("/api/login", "/api/register").permitAll()
+                .requestMatchers("/endpoint").hasAuthority("USER")
            // Catch-all: all other requests must be authenticated
                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
-                        .permitAll());
+                .permitAll());
         return http.build();
     }
 }
