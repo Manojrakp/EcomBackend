@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +15,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
+@EnableMethodSecurity(
+        prePostEnabled = true,      // enables @PreAuthorize, @PostAuthorize
+        securedEnabled = true,      // enables @Secured
+        jsr250Enabled = true        // enables @RolesAllowed
+)
+
 public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final CustomAuthEntryPoint customAuthEntryPoint;
@@ -23,7 +30,7 @@ public class SecurityConfig {
         http
           .csrf((csrf) -> csrf.disable())
            // 2.Combine and order all authorization rules: specific first, catch-all last
-                // 🔹 Register your custom authentication entry point here
+           // 🔹 Register your custom authentication entry point here
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(customAuthEntryPoint)
                 )

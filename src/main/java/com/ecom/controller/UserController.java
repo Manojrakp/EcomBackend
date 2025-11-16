@@ -5,6 +5,9 @@ import java.util.Map;
 
 import com.ecom.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +35,6 @@ public class UserController {
     public Map<String, String> login(@RequestBody Map<String, String> loginRequest) {
         String username = loginRequest.get("username");
         String password = loginRequest.get("password");
-
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
@@ -54,6 +56,22 @@ public class UserController {
 
         String token = jwtUtils.generateToken(username);
         return Map.of("token", token);
+    }
+
+    @PostMapping("/rolechange")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, String>> alterUserRole(@RequestBody Map<String, String> registerRequest) {
+        String username = registerRequest.get("username");
+        String role = registerRequest.get("role");
+        userService.alterUserRole(username,role);
+        Map<String, String> response = Map.of(
+                "message", "User role updated successfully",
+                "username", username,
+                "role", role
+        );
+        return ResponseEntity
+                .status(HttpStatus.OK)   // 200
+                .body(response);
     }
 
     @GetMapping

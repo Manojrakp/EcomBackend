@@ -25,14 +25,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-//    @PostConstruct
-//    public void initDefaultUser() {
-//        if (userRepository.findByUsername("admin").isEmpty()) {
-//            registerUser("ms", "mm", "user", "admin@ecom.com");
-//            System.out.println("Default admin user created: username='admin', password='admin123'");
-//        }
-//    }
-
     //  Save a new user (with encoded password)
     public EcomUser registerUser(String username, String rawPassword, String role, String email) {
         EcomUser newUser = new EcomUser();
@@ -52,6 +44,15 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+
+    public UserDetails alterUserRole(String username, String newRole) {
+        EcomUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        user.setRole(newRole.startsWith("ROLE_") ? newRole : "ROLE_" + newRole);
+        userRepository.save(user);
+        return loadUserByUsername(username);
+    }
+
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         EcomUser user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
@@ -61,4 +62,6 @@ public class UserService implements UserDetailsService {
                 .roles(user.getRole().replace("ROLE_", "")) // ensures consistent naming
                 .build();
     }
+
+
 }
