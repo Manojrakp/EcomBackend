@@ -3,6 +3,7 @@ package com.ecom.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "ECOM_PRODUCTS")
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
 	
 	@Id
@@ -28,7 +30,7 @@ public class Product {
 	@SequenceGenerator(name = "Product_seq", sequenceName = "PRODUCT_SEQ", allocationSize = 1)
 	@Column(columnDefinition = "NUMBER(19,0)")
 
-	private Long id; 
+	private Long id;
     @Column(nullable = false, unique = true, length = 50)
     
     
