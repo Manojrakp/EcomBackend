@@ -1,6 +1,6 @@
-# EcomBackend
-
-Spring JPA
+# Overview
+  This is Spring Boot project for the Ecom website that encompass the Spring Security & Spring JPA for the Data Persistance with the PLSQL/SQL.
+    
 
 
 # Security Overview
