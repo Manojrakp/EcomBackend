@@ -11,10 +11,12 @@ import com.ecom.repository.ProductRepository;
 import com.ecom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+
 public class CartService {
 
     private final CartRepository cartRepository;
@@ -62,20 +64,41 @@ public class CartService {
         CartItem itemToRemove = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
 
-        // Ensure this item belongs to this user's cart
+    //  this item belongs to this user's cart
         if (!itemToRemove.getCart().getId().equals(cart.getId())) {
             throw new RuntimeException("Item does not belong to user cart");
         }
-
        cart.removeCartItem(itemToRemove);
-        cartItemRepository.delete(itemToRemove);
+       cartItemRepository.delete(itemToRemove);
 
-        recalculateTotal(cart);
-        return cartRepository.save(cart);
+       recalculateTotal(cart);
+       return cartRepository.save(cart);
     }
 
     public Cart getCart(Long userId) {
         return cartRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public Cart updateQuantity(Long userId, Long cartItemId, int newQuantity) {
+
+        if (newQuantity <= 0) {
+            return removeFromCart(userId, cartItemId);
+        }
+
+        Cart cart = cartRepository.findByUserId(userId);
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+
+        if (!cartItem.getCart().getId().equals(cart.getId())) {
+            throw new RuntimeException("Item does not belong to this user");
+        }
+
+        cartItem.setQuantity(newQuantity);
+
+        recalculateTotal(cart);
+        return cartRepository.save(cart);
     }
 
     private void recalculateTotal(Cart cart) {

@@ -1,13 +1,13 @@
 package com.ecom.controller;
 
-
-
+import com.ecom.dto.ProductDetailsRecord;
 import com.ecom.entity.Cart;
 import com.ecom.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
@@ -15,26 +15,34 @@ public class CartController {
 
     private final CartService cartService;
 
-    @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(@RequestParam Long userId,
-                                          @RequestParam Long productId,
-                                          @RequestParam int quantity) {
-        Cart updatedCart = cartService.addToCart(userId, productId, quantity);
-        return ResponseEntity.ok(updatedCart);
+    @PostMapping("/item/add")
+    public ResponseEntity<Cart> addToCart(@RequestBody Map<String, Object> body) {
+        Long userId = ((Number) body.get("userId")).longValue();
+        Long productId = ((Number) body.get("productId")).longValue();
+        int quantity = ((Number) body.get("quantity")).intValue();
+
+        return ResponseEntity.ok(cartService.addToCart(userId, productId, quantity));
     }
 
-    // GET /api/cart/1
     @GetMapping("/{userId}")
     public ResponseEntity<Cart> getCart(@PathVariable Long userId) {
-        Cart cart = cartService.getCart(userId);
-        return ResponseEntity.ok(cart);
+        return ResponseEntity.ok(cartService.getCart(userId));
     }
 
-    // DELETE /api/cart/1/item/50
-    @DeleteMapping("/{userId}/item/{cartItemId}")
-    public ResponseEntity<Cart> removeFromCart(@PathVariable Long userId,
-                                               @PathVariable Long cartItemId) {
-        Cart updatedCart = cartService.removeFromCart(userId, cartItemId);
-        return ResponseEntity.ok(updatedCart);
+    @DeleteMapping("/item/delete")
+    public ResponseEntity<Cart> removeFromCart(@RequestBody Map<String, Long> body) {
+        Long userId = body.get("userId");
+        Long cartItemId = body.get("cartItemId");
+
+        return ResponseEntity.ok(cartService.removeFromCart(userId, cartItemId));
+    }
+
+    @PutMapping("/item/modify")
+    public ResponseEntity<Cart> updateQuantity(@RequestBody Map<String, Object> body) {
+        Long userId = ((Number) body.get("userId")).longValue();
+        Long cartItemId = ((Number) body.get("cartItemId")).longValue();
+        int quantity = ((Number) body.get("quantity")).intValue();
+
+        return ResponseEntity.ok(cartService.updateQuantity(userId, cartItemId, quantity));
     }
 }

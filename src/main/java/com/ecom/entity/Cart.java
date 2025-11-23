@@ -2,6 +2,7 @@ package com.ecom.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.HashSet;
@@ -23,17 +24,15 @@ public class Cart {
 
     // Link to the user (One user usually has one active cart)
     @OneToOne
-    @JsonBackReference
-    @JoinColumn(name = "id")
+    @JsonBackReference // added so that user datas are not part of this entity
+    @JoinColumn(name = "user_id")
     private EcomUser user;
 
-    // The list of items in the cart
     // CascadeType.ALL means if we delete the Cart, we delete the Items
     // orphanRemoval = true means if we remove an item from this list, it is deleted from DB
-    @JsonBackReference
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<CartItem> cartItems = new HashSet<>();
-
 
     private Double totalPrice = 0.0;
 
@@ -45,6 +44,6 @@ public class Cart {
 
     public void removeCartItem(CartItem itemToRemove) {
         this.cartItems.remove(itemToRemove);
-        itemToRemove.setCart(this);
+        itemToRemove.setCart(null);
     }
 }

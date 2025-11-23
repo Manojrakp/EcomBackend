@@ -15,13 +15,12 @@ import lombok.*;
 public class CartItem {
 
     @Id
-    // CHANGED: Use SEQUENCE for Oracle compatibility
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_item_seq_gen")
     @SequenceGenerator(name = "cart_item_seq_gen", sequenceName = "cart_item_seq", allocationSize = 1)
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
+    @JsonBackReference
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -39,5 +38,6 @@ public class CartItem {
         this.quantity = quantity;
         this.unitPrice = product.getPrice();
     }
+
 
 }
